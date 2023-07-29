@@ -10,18 +10,10 @@ const pool = require("./../../Database/db")
 // To register/add user
 const registerUser = async (req, res) => {
 
-  try{
-    throw("ere")
-
-  }catch(errr){
-    console.log(errr,"catch")
-
-  }
-  
   let code, message, data;
   let success = false;
   try {
-    let { firstName, lastName, email, roles, username, password } =
+    let { firstName, lastName, email, roles,username, password } =
       req.body;
     email = email.toLowerCase();
 
@@ -32,10 +24,14 @@ const registerUser = async (req, res) => {
       throw { message: "user already present" };
     }
   
+    if (!roles){
+      roles=["parent"]
 
+    }
     if (roles.includes("admin")) {
       roles = roles.filter((role) => role != "admin");
     }
+    
     let has_password = await bcrypt.hash(password, 10)
     roles =  JSON.stringify(roles)
     const query = {
@@ -43,22 +39,12 @@ const registerUser = async (req, res) => {
       values: [firstName, lastName, email, roles, username, has_password],
     };
     var newUser 
-    await pool.query(query,(err, result)=>{
-      if (err){
-        console.log(err)
-      }
-      if (result){
-        console.log(result)
-        newUser  = result
- 
-      }
-    })
+    const registreUser = await pool.query(query)
 
     code = constants.HTTP_201_CODE;
-    message = "Register succesfully";
-    success = true;
-    const resData = customResponse({ code, message, success });
-    return res.status(code).send(resData);
+    
+   
+    return res.status(code).send(registreUser.rows);
   }catch (error) {
 
     console.log("error in post register user endpoint", error);
@@ -111,6 +97,7 @@ const login = async (req, res) => {
   
     data = {
       username: req.body.username,
+      roles:userDoc.rows[0]["roles"],
       tokens: { accessToken: accessToken },
     };
     if (isMatch) {

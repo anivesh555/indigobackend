@@ -9,7 +9,7 @@ const createUsersTable = require("./Database/tables")
 
 const port = process.env.API_PORT || 8085;
 let corsOptions = {
-    origin : "http://localhost:3000"
+    origin : "http://localhost:4200"
 };
 
 app.use(cors(corsOptions));

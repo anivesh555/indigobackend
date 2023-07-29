@@ -13,7 +13,7 @@ const createUsersTable = async () => {
       );
     `;
     try {
-      console.log("errr0r ====")
+
       await pool.query(createTableQuery);
 
       console.log('Users table created (if not exist)');
@@ -25,7 +25,7 @@ const createUsersTable = async () => {
       CREATE TABLE IF NOT EXISTS trips (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255),
-        childName VARCHAR(255),
+        childname VARCHAR(255),
         relation VARCHAR(100),
         departure_location VARCHAR(255),
         destination VARCHAR(255),

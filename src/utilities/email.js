@@ -15,7 +15,7 @@ const sendEmail = async (emailData) => {
           }
           console.log(mailData)
       // Create a SMTP transporter object
-      const transporter = await nodemailer.createTranspor({
+      const transporter = await nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         port: process.env.EMAIL_PORT,
         secure: true,
@@ -30,15 +30,12 @@ const sendEmail = async (emailData) => {
         from: process.env.USER,
         to: "abhadauriya.8445@gmail.com",
         cc: "abhadauriya.8475@gmail.com",
-        subject: "emailData.subject",
-        text: "emailData.text",
-        // html: emailData.html,
-        // attachments: attachments,
-        //   attachments: [{ filename: "ex.png", path: "./ex.png" }],
+        subject: "Status of Application",
+        text: emailData,
       };
       console.log(message,"==>")
-        //   let info = await transporter.sendMail(message);
-        //   console.log("Message sent: %s", info.messageId);
+      let info = await transporter.sendMail(message);
+      console.log("Message sent: %s", info.messageId);
       return true
 
     } catch (error) {
